@@ -15,6 +15,8 @@ The API can also be used as a **wine dataset API for AI and machine learning app
 ![API](https://img.shields.io/badge/API-Wine-green)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
+---
+
 ## Features
 
 The Grapeminds API provides access to:
