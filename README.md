@@ -271,10 +271,14 @@ This repository provides ready-to-run scripts for calling the grapeminds Wine AP
 
 ```
 examples/
-  curl/examples.sh      – shell script using curl
-  node/examples.js      – Node.js 18+ using built-in fetch
-  python/examples.py    – Python using requests
-  php/examples.php      – PHP using cURL
+  curl/examples.sh        – shell script using curl
+  node/examples.js        – Node.js 18+ using built-in fetch
+  typescript/examples.ts  – TypeScript with type definitions (Node 18+)
+  python/examples.py      – Python using requests
+  ruby/examples.rb        – Ruby using net/http (stdlib, no gems)
+  php/examples.php        – PHP using cURL
+  swift/examples.swift    – Swift 5.5+ using URLSession + async/await
+  dart/examples.dart      – Dart / Flutter using package:http
 ```
 
 Each script covers all documented endpoints and prints the JSON responses.
@@ -314,6 +318,32 @@ python examples/python/examples.py
 php examples/php/examples.php
 ```
 
+### TypeScript (requires Node 18+ and ts-node)
+
+```bash
+npm install -g ts-node typescript
+API_KEY=your_key ts-node examples/typescript/examples.ts
+```
+
+### Ruby (requires Ruby 2.7+, no gems needed)
+
+```bash
+API_KEY=your_key ruby examples/ruby/examples.rb
+```
+
+### Swift (requires Swift 5.5+ / Xcode 13+)
+
+```bash
+API_KEY=your_key swift examples/swift/examples.swift
+```
+
+### Dart (requires Dart SDK 2.17+ or Flutter 3+)
+
+```bash
+dart pub add http
+API_KEY=your_key dart run examples/dart/examples.dart
+```
+
 ---
 
 ## Minimal Snippets
@@ -347,6 +377,40 @@ $ctx = stream_context_create(['http' => [
     'header' => 'Authorization: Bearer ' . getenv('API_KEY'),
 ]]);
 echo file_get_contents("https://grapeminds.eu/api/public/v1/wines", false, $ctx);
+```
+
+**TypeScript**
+```typescript
+const res = await fetch("https://grapeminds.eu/api/public/v1/wines", {
+  headers: { Authorization: `Bearer ${process.env.API_KEY}` },
+});
+console.log(await res.json());
+```
+
+**Ruby**
+```ruby
+require "net/http"; require "json"
+req = Net::HTTP::Get.new(URI("https://grapeminds.eu/api/public/v1/wines"))
+req["Authorization"] = "Bearer #{ENV['API_KEY']}"
+res = Net::HTTP.start("grapeminds.eu", 443, use_ssl: true) { |h| h.request(req) }
+puts JSON.pretty_generate(JSON.parse(res.body))
+```
+
+**Swift**
+```swift
+var req = URLRequest(url: URL(string: "https://grapeminds.eu/api/public/v1/wines")!)
+req.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+let (data, _) = try await URLSession.shared.data(for: req)
+print(String(data: data, encoding: .utf8)!)
+```
+
+**Dart / Flutter**
+```dart
+final res = await http.get(
+  Uri.parse('https://grapeminds.eu/api/public/v1/wines'),
+  headers: {'Authorization': 'Bearer $apiKey'},
+);
+print(res.body);
 ```
 
 ---
