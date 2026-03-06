@@ -1,0 +1,469 @@
+{
+    "info": {
+        "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "name": "grapeminds Public API v1",
+        "description": "Complete API collection for the grapeminds Public API. Includes all endpoints for wines, producers, regions, region insights, and drinking periods.\n\n**Setup Instructions:**\n1. Set your API key in the collection variables (API_KEY)\n2. Optionally set your preferred language (LANGUAGE: de, en, fr, it)\n3. All requests will automatically use these variables\n\n**Base URL:** https://grapeminds.eu/api/public/v1",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Wines",
+            "item": [
+                {
+                    "name": "List Wines",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{API_KEY}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Accept-Language",
+                                "value": "{{LANGUAGE}}",
+                                "type": "text",
+                                "description": "Language for residual_sugar and region names (de, en, fr, it)"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{BASE_URL}}/wines?page=1&per_page=15",
+                            "host": [
+                                "{{BASE_URL}}"
+                            ],
+                            "path": [
+                                "wines"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1",
+                                    "description": "Page number"
+                                },
+                                {
+                                    "key": "per_page",
+                                    "value": "15",
+                                    "description": "Items per page (max: 100)"
+                                },
+                                {
+                                    "key": "color",
+                                    "value": "red",
+                                    "description": "Filter by color (red, white, rose)",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "sub_type",
+                                    "value": "still",
+                                    "description": "Filter by type (still, sparkling)",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "producer_id",
+                                    "value": "1771",
+                                    "description": "Filter by producer ID",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "region_id",
+                                    "value": "210",
+                                    "description": "Filter by region ID",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "Retrieve a paginated list of wines. Supports filtering by color, type, producer, and region."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Search Wines",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{API_KEY}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Accept-Language",
+                                "value": "{{LANGUAGE}}",
+                                "type": "text",
+                                "description": "Language for residual_sugar (de, en, fr, it)"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{BASE_URL}}/wines/search?q=Tignanello&limit=20",
+                            "host": [
+                                "{{BASE_URL}}"
+                            ],
+                            "path": [
+                                "wines",
+                                "search"
+                            ],
+                            "query": [
+                                {
+                                    "key": "q",
+                                    "value": "Tignanello",
+                                    "description": "Search query (min 3 characters)"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "20",
+                                    "description": "Max results (max: 100)"
+                                }
+                            ]
+                        },
+                        "description": "Search for wines by name, producer, or other attributes. Minimum 3 characters required."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Wine Details",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{API_KEY}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Accept-Language",
+                                "value": "{{LANGUAGE}}",
+                                "type": "text",
+                                "description": "Language for descriptions (de, en, fr, it)"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{BASE_URL}}/wines/9146",
+                            "host": [
+                                "{{BASE_URL}}"
+                            ],
+                            "path": [
+                                "wines",
+                                "9146"
+                            ]
+                        },
+                        "description": "Get detailed information about a specific wine, including descriptions, tasting notes, pairing suggestions, and flavor profile in your preferred language."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Endpoints for managing and searching wines"
+        },
+        {
+            "name": "Producers",
+            "item": [
+                {
+                    "name": "List Producers",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{API_KEY}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{BASE_URL}}/producers?per_page=15",
+                            "host": [
+                                "{{BASE_URL}}"
+                            ],
+                            "path": [
+                                "producers"
+                            ],
+                            "query": [
+                                {
+                                    "key": "per_page",
+                                    "value": "15",
+                                    "description": "Items per page (max: 100)"
+                                },
+                                {
+                                    "key": "search",
+                                    "value": "Antinori",
+                                    "description": "Search by name (min 2 characters)",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "Retrieve a paginated list of wine producers. Supports search by name."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Producer Details",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{API_KEY}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Accept-Language",
+                                "value": "{{LANGUAGE}}",
+                                "type": "text",
+                                "description": "Language for residual_sugar in wines (de, en, fr, it)"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{BASE_URL}}/producers/1771?include_wines=1",
+                            "host": [
+                                "{{BASE_URL}}"
+                            ],
+                            "path": [
+                                "producers",
+                                "1771"
+                            ],
+                            "query": [
+                                {
+                                    "key": "include_wines",
+                                    "value": "1",
+                                    "description": "Include wines from this producer"
+                                }
+                            ]
+                        },
+                        "description": "Get detailed information about a specific producer. Optionally include their wines."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Endpoints for wine producers"
+        },
+        {
+            "name": "Regions",
+            "item": [
+                {
+                    "name": "List Regions",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{API_KEY}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Accept-Language",
+                                "value": "{{LANGUAGE}}",
+                                "type": "text",
+                                "description": "Language for region names (de, en, fr, it)"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{BASE_URL}}/regions?per_page=15",
+                            "host": [
+                                "{{BASE_URL}}"
+                            ],
+                            "path": [
+                                "regions"
+                            ],
+                            "query": [
+                                {
+                                    "key": "per_page",
+                                    "value": "15",
+                                    "description": "Items per page (max: 100)"
+                                },
+                                {
+                                    "key": "country",
+                                    "value": "IT",
+                                    "description": "Filter by country code (IT, FR, DE, etc.)",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "search",
+                                    "value": "Toskana",
+                                    "description": "Search by name",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "Retrieve a paginated list of wine regions. Region names are returned in the language specified in Accept-Language header."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Region Details",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{API_KEY}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Accept-Language",
+                                "value": "{{LANGUAGE}}",
+                                "type": "text",
+                                "description": "Language for region names (de, en, fr, it)"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{BASE_URL}}/regions/210?include_wines=1",
+                            "host": [
+                                "{{BASE_URL}}"
+                            ],
+                            "path": [
+                                "regions",
+                                "210"
+                            ],
+                            "query": [
+                                {
+                                    "key": "include_wines",
+                                    "value": "1",
+                                    "description": "Include wines from this region"
+                                }
+                            ]
+                        },
+                        "description": "Get detailed information about a specific wine region. Optionally include wines from that region."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Endpoints for wine regions"
+        },
+        {
+            "name": "Region Insights",
+            "item": [
+                {
+                    "name": "Get Region Insights",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{API_KEY}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{BASE_URL}}/region-insights/210?lang={{LANGUAGE}}",
+                            "host": [
+                                "{{BASE_URL}}"
+                            ],
+                            "path": [
+                                "region-insights",
+                                "210"
+                            ],
+                            "query": [
+                                {
+                                    "key": "lang",
+                                    "value": "{{LANGUAGE}}",
+                                    "description": "Language code (de, en, fr, it)"
+                                }
+                            ]
+                        },
+                        "description": "Get detailed insights about a wine region including climate, terroir, signature wine styles, and key grape varieties."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Endpoints for detailed region information and insights"
+        },
+        {
+            "name": "Drinking Periods",
+            "item": [
+                {
+                    "name": "Get Drinking Period",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{API_KEY}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{BASE_URL}}/drinking-periods/9146?lang={{LANGUAGE}}",
+                            "host": [
+                                "{{BASE_URL}}"
+                            ],
+                            "path": [
+                                "drinking-periods",
+                                "9146"
+                            ],
+                            "query": [
+                                {
+                                    "key": "lang",
+                                    "value": "{{LANGUAGE}}",
+                                    "description": "Language code (de, en, fr, it)"
+                                }
+                            ]
+                        },
+                        "description": "Get optimal drinking window and maturity information for a specific wine, including tasting characteristics when young and ripe, plus storage recommendations."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Endpoints for wine drinking periods and maturity information"
+        },
+        {
+            "name": "Photo Analysis",
+            "item": [
+                {
+                    "name": "Analyze Wine Label",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{API_KEY}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Accept-Language",
+                                "value": "{{LANGUAGE}}",
+                                "type": "text",
+                                "description": "Language for residual_sugar and region names (de, en, fr, it)"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"photo\": \"data:image/jpeg;base64,/9j/4AAQ...\",\n  \"max_results\": 5\n}"
+                        },
+                        "url": {
+                            "raw": "{{BASE_URL}}/photo/analyze",
+                            "host": [
+                                "{{BASE_URL}}"
+                            ],
+                            "path": [
+                                "photo",
+                                "analyze"
+                            ]
+                        },
+                        "description": "Analyze a wine label photo using AI to identify wines. Requires Enterprise API subscription. Send a base64-encoded image and receive matching wine candidates."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "AI-powered wine label photo analysis (Enterprise only)"
+        }
+    ],
+    "variable": [
+        {
+            "key": "BASE_URL",
+            "value": "https://grapeminds.eu/api/public/v1",
+            "type": "string"
+        },
+        {
+            "key": "API_KEY",
+            "value": "YOUR_API_KEY_HERE",
+            "type": "string"
+        },
+        {
+            "key": "LANGUAGE",
+            "value": "de",
+            "type": "string"
+        }
+    ]
+}

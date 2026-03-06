@@ -1,0 +1,604 @@
+# grapeminds Wine API – Complete Reference for LLMs
+
+> The grapeminds Wine API provides comprehensive access to wine data including wines, producers, regions, drinking periods, region insights, and AI-powered photo label recognition.
+
+## Documentation
+
+- [API Overview](https://grapeminds.eu/developers/wine-api)
+- [Endpoint Reference](https://grapeminds.eu/developers/endpoints)
+- [Authentication](https://grapeminds.eu/developers/authentication)
+- [Rate Limits](https://grapeminds.eu/developers/rate-limits)
+- [Use Cases](https://grapeminds.eu/developers/use-cases)
+- [AI & LLM Integration](https://grapeminds.eu/developers/ai-integration)
+- [Postman Collection (JSON)](https://grapeminds.eu/postman/GrapeMinds-Public-API-v1.postman_collection.json)
+
+## Base Configuration
+
+- **Base URL:** `https://grapeminds.eu/api/public/v1`
+- **Content-Type:** `application/json`
+- **Authentication:** `Authorization: Bearer YOUR_API_KEY` or `X-API-Key: YOUR_API_KEY`
+- **Supported Languages:** `de`, `en`, `fr`, `it` (via `Accept-Language` header or `?lang=` parameter)
+
+## Rate Limits
+
+Rate limits are communicated via response headers:
+
+| Header | Description |
+|--------|-------------|
+| `X-RateLimit-Limit-RPS` | Requests per second (token bucket) |
+| `X-RateLimit-Burst` | Burst allowance |
+| `X-RateLimit-Limit-RPM` | Requests per minute |
+| `X-RateLimit-Limit` | Total request limit (Trial keys) |
+| `X-RateLimit-Remaining` | Remaining requests (Trial keys) |
+| `Retry-After` | Seconds to wait (on 429) |
+
+| Plan | Per Minute | Per Day |
+|------|-----------|---------|
+| Trial | 60 | 1,000 |
+| Standard | 120 | 10,000 |
+| Enterprise | Custom | Custom |
+
+## Authentication Errors
+
+| Status | Message |
+|--------|---------|
+| 401 | `API key is required` |
+| 401 | `Invalid API key` |
+| 401 | `API key is inactive, expired, or revoked` |
+
+---
+
+## Endpoints
+
+### GET /wines
+
+List wines with pagination and filtering.
+
+**Query Parameters:**
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `page` | integer | no | 1 | Page number (min: 1) |
+| `per_page` | integer | no | 15 | Results per page (min: 1, max: 100) |
+| `color` | string | no | — | Filter by color: `red`, `white`, `rose` |
+| `sub_type` | string | no | — | Filter by sub-type: `still`, `sparkling` |
+| `type` | string | no | — | Filter by wine type |
+| `producer_id` | integer | no | — | Filter by producer ID |
+| `region_id` | integer | no | — | Filter by region ID |
+
+**Example:** `GET /wines?color=red&per_page=5`
+
+**Headers:** `Accept-Language` – 2-letter language code (default: `en`). Controls localization of `residual_sugar` and `region`.
+
+**Response (200):**
+```json
+{
+  "data": [
+    {
+      "id": 42,
+      "display_name": "Barolo DOCG 2018",
+      "color": "red",
+      "type": "wine",
+      "sub_type": "still",
+      "residual_sugar": "dry",
+      "producer": { "id": 10, "name": "Marchesi di Barolo", "title": null, "display_name": "Marchesi di Barolo" },
+      "region": { "id": 5, "name": "Barolo", "country": "IT", "language": "en" }
+    }
+  ],
+  "meta": {
+    "current_page": 1,
+    "last_page": 83,
+    "per_page": 5,
+    "total": 415,
+    "from": 1,
+    "to": 5
+  },
+  "links": {
+    "first": "https://grapeminds.eu/api/public/v1/wines?page=1",
+    "last": "https://grapeminds.eu/api/public/v1/wines?page=83",
+    "prev": null,
+    "next": "https://grapeminds.eu/api/public/v1/wines?page=2"
+  }
+}
+```
+
+---
+
+### GET /wines/search
+
+Full-text search for wines using Typesense (fuzzy, typo-tolerant).
+
+**Headers:** `Accept-Language` – 2-letter language code (default: `en`). Controls localization of `residual_sugar`.
+
+**Query Parameters:**
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `q` | string | **yes** | — | Search query (min: 3 characters) |
+| `limit` | integer | no | 20 | Max results (min: 1, max: 100) |
+
+**Example:** `GET /wines/search?q=Barolo&limit=5`
+
+**Response (200):**
+```json
+{
+  "data": [
+    {
+      "id": 42,
+      "display_name": "Barolo DOCG 2018",
+      "color": "red",
+      "residual_sugar": "dry",
+      "producer_name": "Marchesi di Barolo",
+      "producer_title": null,
+      "producer_display_name": "Marchesi di Barolo"
+    }
+  ],
+  "meta": {
+    "query": "Barolo",
+    "count": 1
+  }
+}
+```
+
+---
+
+### GET /wines/{id}
+
+Get detailed information about a specific wine including descriptions, grape varieties, food pairings, tasting notes, and flavor profile.
+
+**Path Parameters:** `id` (integer) – Wine ID
+
+**Headers:** `Accept-Language` – 2-letter language code (default: `en`). Controls localization of descriptions, pairings, tasting notes, grape names, `residual_sugar`, and `region`.
+
+**Example:** `GET /wines/42` with `Accept-Language: de`
+
+**Response (200):**
+```json
+{
+  "data": {
+    "id": 42,
+    "display_name": "Barolo DOCG 2018",
+    "color": "red",
+    "type": "wine",
+    "sub_type": "still",
+    "residual_sugar": "trocken",
+    "producer": { "id": 10, "name": "Marchesi di Barolo", "title": null, "display_name": "Marchesi di Barolo" },
+    "region": { "id": 5, "name": "Barolo", "country": "IT", "language": "de" },
+    "grapes": [
+      { "id": 1, "name": "Nebbiolo" }
+    ],
+    "description": {
+      "text": "Ein kraftvoller Rotwein aus dem Piemont...",
+      "text_long": "Der Barolo DOCG 2018 ist ein eleganter...",
+      "language": "de"
+    },
+    "pairing": {
+      "text": "Passt hervorragend zu Trüffel-Gerichten...",
+      "text_long": "Dieser Barolo harmoniert besonders gut...",
+      "language": "de"
+    },
+    "tasting_notes": {
+      "text": "Intensive Aromen von roten Beeren...",
+      "text_long": "In der Nase zeigen sich komplexe Noten...",
+      "language": "de"
+    },
+    "flavor_profile": {
+      "sweetness": 1,
+      "acidity": 3,
+      "tannins": 5,
+      "alcohol": 4,
+      "body": 5,
+      "finish": 5
+    }
+  }
+}
+```
+
+**Errors:** `404` if wine not found.
+
+**Note:** If descriptions/pairings/tasting notes are not yet available in the requested language, background AI-enrichment is triggered automatically. Subsequent requests will return localized content.
+
+---
+
+### GET /producers
+
+List wine producers with pagination and search.
+
+**Query Parameters:**
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `page` | integer | no | 1 | Page number (min: 1) |
+| `per_page` | integer | no | 15 | Results per page (min: 1, max: 100) |
+| `search` | string | no | — | Search producer name (min: 2 chars, LIKE match) |
+
+**Example:** `GET /producers?search=Marchesi&per_page=10`
+
+**Response (200):**
+```json
+{
+  "data": [
+    { "id": 10, "name": "Marchesi di Barolo", "title": null }
+  ],
+  "meta": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 10,
+    "total": 1,
+    "from": 1,
+    "to": 1
+  },
+  "links": {
+    "first": "...",
+    "last": "...",
+    "prev": null,
+    "next": null
+  }
+}
+```
+
+---
+
+### GET /producers/{id}
+
+Get details for a specific producer, optionally including their wines.
+
+**Path Parameters:** `id` (integer) – Producer ID
+
+**Headers:** `Accept-Language` – 2-letter language code (default: `en`). Controls localization of `residual_sugar` in wines.
+
+**Query Parameters:**
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `include_wines` | boolean | no | false | Include list of wines (max 50) |
+
+**Example:** `GET /producers/10?include_wines=true`
+
+**Response (200):**
+```json
+{
+  "data": {
+    "id": 10,
+    "name": "Marchesi di Barolo",
+    "title": null,
+    "display_name": "Marchesi di Barolo",
+    "wines": [
+      {
+        "id": 42,
+        "display_name": "Barolo DOCG 2018",
+        "vintage": "2018",
+        "color": "red",
+        "producer_id": 10,
+        "residual_sugar": "dry"
+      }
+    ],
+    "wines_count": 1
+  }
+}
+```
+
+**Note:** `wines` and `wines_count` are only included when `include_wines=true`. Maximum 50 wines returned.
+
+**Errors:** `404` if producer not found.
+
+---
+
+### GET /regions
+
+List wine regions, filtered by language.
+
+**Headers:** `Accept-Language` – 2-letter language code (default: `en`). Filters regions by language.
+
+**Query Parameters:**
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `page` | integer | no | 1 | Page number (min: 1) |
+| `per_page` | integer | no | 15 | Results per page (min: 1, max: 100) |
+| `country` | string | no | — | Filter by ISO country code (2 chars, e.g. `IT`) |
+| `search` | string | no | — | Search region name (min: 2 chars, LIKE match) |
+
+**Example:** `GET /regions?country=IT&per_page=5` with `Accept-Language: en`
+
+**Response (200):**
+```json
+{
+  "data": [
+    { "id": 5, "name": "Barolo", "country": "IT", "language": "en" }
+  ],
+  "meta": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 5,
+    "total": 1,
+    "from": 1,
+    "to": 1,
+    "language": "en"
+  },
+  "links": {
+    "first": "...",
+    "last": "...",
+    "prev": null,
+    "next": null
+  }
+}
+```
+
+---
+
+### GET /regions/{id}
+
+Get details for a specific region, optionally including wines from that region.
+
+**Path Parameters:** `id` (integer) – Region ID
+
+**Headers:** `Accept-Language` – 2-letter language code (default: `en`).
+
+**Query Parameters:**
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `include_wines` | boolean | no | false | Include list of wines (max 50) |
+
+**Example:** `GET /regions/5?include_wines=true`
+
+**Response (200):**
+```json
+{
+  "data": {
+    "id": 5,
+    "name": "Barolo",
+    "country": "IT",
+    "language": "en",
+    "wines": [
+      {
+        "id": 42,
+        "display_name": "Barolo DOCG 2018",
+        "color": "red",
+        "producer_id": 10,
+        "region_id": 5,
+        "residual_sugar": "dry",
+        "producer": { "id": 10, "name": "Marchesi di Barolo", "title": null }
+      }
+    ],
+    "wines_count": 1
+  }
+}
+```
+
+**Note:** `wines` and `wines_count` are only included when `include_wines=true`. Maximum 50 wines returned.
+
+**Errors:** `404` if region not found for the requested language.
+
+---
+
+### GET /region-insights/{regionId}
+
+Get detailed insights about a wine region including climate, terroir, signature styles, and key grapes.
+
+**Path Parameters:** `regionId` (integer) – Region ID
+
+**Query Parameters:**
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `lang` | string | no | — | Language: `de`, `en`, `fr`, `it`. Falls back to `Accept-Language` header, then `en`. |
+
+**Example:** `GET /region-insights/5?lang=en`
+
+**Response (200):**
+```json
+{
+  "id": 1,
+  "region_id": 5,
+  "lang": "en",
+  "summary": "Barolo is one of Italy's most prestigious wine regions...",
+  "climate_and_terroir": "Continental climate with significant...",
+  "signature_styles": "Full-bodied, tannic red wines...",
+  "key_grapes": "Nebbiolo is the sole grape variety..."
+}
+```
+
+**Errors:**
+
+| Status | `generating` | Meaning |
+|--------|-------------|---------|
+| `404` | `false` | Region does not exist |
+| `404` | `true` | Region exists, no insight in the requested language — AI generation triggered. Retry after ~30s |
+
+```json
+// generating: false (region does not exist)
+{ "error": "Region insight not found for the specified language.", "generating": false }
+
+// generating: true (content is being generated — retry after ~30s)
+{ "error": "Region insight not found for the specified language.", "generating": true }
+```
+
+**Note:** Always check the `generating` field on 404 responses. When `generating: true`, the insight is being generated and will typically be available within 30 seconds. Implement a one-time retry strategy.
+
+---
+
+### GET /drinking-periods/{wineId}
+
+Get the optimal drinking window for a specific wine, including assessments for drinking young, at maturity, and storage guidance.
+
+**Path Parameters:** `wineId` (integer) – Wine ID
+
+**Query Parameters:**
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `lang` | string | no | — | Language: `de`, `en`, `fr`, `it`. Falls back to `Accept-Language` header, then `en`. |
+
+**Example:** `GET /drinking-periods/42?lang=en`
+
+**Response (200):**
+```json
+{
+  "id": 1,
+  "wine_id": 42,
+  "lang": "en",
+  "from": 2024,
+  "to": 2035,
+  "statement": "This Barolo is best enjoyed between 2024 and 2035.",
+  "young": "Already approachable with decanting, showing fresh fruit...",
+  "ripe": "At peak maturity, expect complex aromas of tar and roses...",
+  "storage": "Store in a cool, dark place at 12-16°C..."
+}
+```
+
+**Errors:**
+
+| Status | `generating` | Meaning |
+|--------|-------------|---------|
+| `404` | `false` | Wine does not exist |
+| `404` | `true` | Wine exists, no drinking period in the requested language — AI generation triggered. Retry after ~30s |
+
+```json
+// generating: false (wine does not exist)
+{ "error": "Drinking period not found for the specified language.", "generating": false }
+
+// generating: true (content is being generated — retry after ~30s)
+{ "error": "Drinking period not found for the specified language.", "generating": true }
+```
+
+**Note:** Always check the `generating` field on 404 responses. When `generating: true`, the drinking period is being generated and will typically be available within 30 seconds. Implement a one-time retry strategy.
+
+---
+
+### POST /photo/analyze
+
+Analyze a wine label photo using AI to identify wines. **Requires Enterprise API subscription.**
+
+**Additional Middleware:** `api.enterprise` – requires an Enterprise API subscription.
+
+**Headers:** `Accept-Language` – 2-letter language code (default: `en`). Controls localization of `residual_sugar` and `region` in candidates.
+
+**Request Body (JSON):**
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| `photo` | string | **yes** | — | Base64-encoded image (optionally with `data:image/...;base64,` prefix) |
+| `max_results` | integer | no | 10 | Maximum wine matches (min: 1, max: 50) |
+
+**Example:**
+```json
+POST /photo/analyze
+{
+  "photo": "data:image/jpeg;base64,/9j/4AAQSkZJRgABA...",
+  "max_results": 5
+}
+```
+
+**Response (200 – labels detected):**
+```json
+{
+  "message": "ok",
+  "detected_labels": [
+    {
+      "producer_name": "Marchesi di Barolo",
+      "wine_name": "Barolo DOCG",
+      "vintage": 2018,
+      "color": "red",
+      "region_name": "Barolo",
+      "country": "IT"
+    }
+  ],
+  "candidates": [
+    {
+      "id": 42,
+      "display_name": "Barolo DOCG 2018",
+      "color": "red",
+      "type": "wine",
+      "sub_type": "still",
+      "residual_sugar": "dry",
+      "producer": { "id": 10, "name": "Marchesi di Barolo", "title": null },
+      "region": { "id": 5, "name": "Barolo", "country": "IT" }
+    }
+  ]
+}
+```
+
+**Response (200 – no label detected):**
+```json
+{
+  "message": "no_label_detected",
+  "detected_labels": [],
+  "candidates": []
+}
+```
+
+**Errors:**
+
+| Status | Code | Message |
+|--------|------|---------|
+| 403 | `forbidden` | `This endpoint requires an Enterprise API subscription` |
+| 422 | `invalid_image` | `Could not decode image data` |
+| 502 | `ai_analysis_failed` | `Failed to analyze image` |
+| 503 | `service_unavailable` | `Image analysis service is not configured` |
+
+---
+
+### GET /ping
+
+Health check endpoint to verify authentication and API availability.
+
+**Example:** `GET /ping`
+
+**Response (200):** Confirms the API key is valid and the API is operational.
+
+---
+
+## Common Patterns
+
+### Pagination
+
+All list endpoints return paginated results with a consistent structure:
+```json
+{
+  "data": [...],
+  "meta": {
+    "current_page": 1,
+    "last_page": 10,
+    "per_page": 15,
+    "total": 150,
+    "from": 1,
+    "to": 15
+  },
+  "links": {
+    "first": "...?page=1",
+    "last": "...?page=10",
+    "prev": null,
+    "next": "...?page=2"
+  }
+}
+```
+
+### Language Support
+
+Many endpoints support localization via:
+- `Accept-Language` header (e.g., `Accept-Language: de`)
+- `?lang=` query parameter (takes precedence where supported)
+- Supported languages: `de` (German), `en` (English), `fr` (French), `it` (Italian)
+- Default: `en`
+
+### Error Responses
+
+Errors follow a consistent JSON structure:
+```json
+{ "message": "Error description" }
+```
+or for structured errors:
+```json
+{ "error": { "code": "error_code", "message": "Human-readable error message" } }
+```
+
+## Getting Started
+
+1. Register at https://grapeminds.eu/entwickler#registration
+2. Receive your API key via email
+3. Add the API key to your requests as `Authorization: Bearer YOUR_KEY`
+4. First request: `curl -H "Authorization: Bearer YOUR_KEY" https://grapeminds.eu/api/public/v1/wines?per_page=5`
+5. Search for a wine: `curl -H "Authorization: Bearer YOUR_KEY" "https://grapeminds.eu/api/public/v1/wines/search?q=Barolo"`
+6. Get wine details: `curl -H "Authorization: Bearer YOUR_KEY" -H "Accept-Language: en" https://grapeminds.eu/api/public/v1/wines/42`
