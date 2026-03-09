@@ -3,11 +3,11 @@
 // Set your API key in the apiKey constant below, then:
 //   swift examples/swift/examples.swift
 //
-// Base URL: https://grapeminds.eu/api/public/v1
+// Base URL: https://api.grapeminds.eu/public/v1
 
 import Foundation
 
-let baseURL = "https://grapeminds.eu/api/public/v1"
+let baseURL = "https://api.grapeminds.eu/public/v1"
 let apiKey  = ProcessInfo.processInfo.environment["API_KEY"] ?? "YOUR_API_KEY"
 
 // MARK: – HTTP helper

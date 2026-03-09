@@ -14,7 +14,7 @@
 
 ## Base Configuration
 
-- **Base URL:** `https://grapeminds.eu/api/public/v1`
+- **Base URL:** `https://api.grapeminds.eu/public/v1`
 - **Content-Type:** `application/json`
 - **Authentication:** `Authorization: Bearer YOUR_API_KEY` or `X-API-Key: YOUR_API_KEY`
 - **Supported Languages:** `de`, `en`, `fr`, `it` (via `Accept-Language` header or `?lang=` parameter)
@@ -94,10 +94,10 @@ List wines with pagination and filtering.
     "to": 5
   },
   "links": {
-    "first": "https://grapeminds.eu/api/public/v1/wines?page=1",
-    "last": "https://grapeminds.eu/api/public/v1/wines?page=83",
+    "first": "https://api.grapeminds.eu/public/v1/wines?page=1",
+    "last": "https://api.grapeminds.eu/public/v1/wines?page=83",
     "prev": null,
-    "next": "https://grapeminds.eu/api/public/v1/wines?page=2"
+    "next": "https://api.grapeminds.eu/public/v1/wines?page=2"
   }
 }
 ```
@@ -599,6 +599,6 @@ or for structured errors:
 1. Register at https://grapeminds.eu/entwickler#registration
 2. Receive your API key via email
 3. Add the API key to your requests as `Authorization: Bearer YOUR_KEY`
-4. First request: `curl -H "Authorization: Bearer YOUR_KEY" https://grapeminds.eu/api/public/v1/wines?per_page=5`
-5. Search for a wine: `curl -H "Authorization: Bearer YOUR_KEY" "https://grapeminds.eu/api/public/v1/wines/search?q=Barolo"`
-6. Get wine details: `curl -H "Authorization: Bearer YOUR_KEY" -H "Accept-Language: en" https://grapeminds.eu/api/public/v1/wines/42`
+4. First request: `curl -H "Authorization: Bearer YOUR_KEY" https://api.grapeminds.eu/public/v1/wines?per_page=5`
+5. Search for a wine: `curl -H "Authorization: Bearer YOUR_KEY" "https://api.grapeminds.eu/public/v1/wines/search?q=Barolo"`
+6. Get wine details: `curl -H "Authorization: Bearer YOUR_KEY" -H "Accept-Language: en" https://api.grapeminds.eu/public/v1/wines/42`

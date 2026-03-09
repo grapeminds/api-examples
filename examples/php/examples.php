@@ -4,9 +4,9 @@
 // Requires PHP 7.4+ with the cURL extension enabled
 // Set your API key:  API_KEY=your_key php examples/php/examples.php
 //
-// Base URL: https://grapeminds.eu/api/public/v1
+// Base URL: https://api.grapeminds.eu/public/v1
 
-define('BASE_URL', 'https://grapeminds.eu/api/public/v1');
+define('BASE_URL', 'https://api.grapeminds.eu/public/v1');
 $apiKey = getenv('API_KEY') ?: 'YOUR_API_KEY';
 
 function apiGet(string $path, string $apiKey): array

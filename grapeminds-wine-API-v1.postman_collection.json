@@ -2,7 +2,7 @@
     "info": {
         "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         "name": "grapeminds Public API v1",
-        "description": "Complete API collection for the grapeminds Public API. Includes all endpoints for wines, producers, regions, region insights, and drinking periods.\n\n**Setup Instructions:**\n1. Set your API key in the collection variables (API_KEY)\n2. Optionally set your preferred language (LANGUAGE: de, en, fr, it)\n3. All requests will automatically use these variables\n\n**Base URL:** https://grapeminds.eu/api/public/v1",
+        "description": "Complete API collection for the grapeminds Public API. Includes all endpoints for wines, producers, regions, region insights, and drinking periods.\n\n**Setup Instructions:**\n1. Set your API key in the collection variables (API_KEY)\n2. Optionally set your preferred language (LANGUAGE: de, en, fr, it)\n3. All requests will automatically use these variables\n\n**Base URL:** https://api.grapeminds.eu/public/v1",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
     "item": [
@@ -452,7 +452,7 @@
     "variable": [
         {
             "key": "BASE_URL",
-            "value": "https://grapeminds.eu/api/public/v1",
+            "value": "https://api.grapeminds.eu/public/v1",
             "type": "string"
         },
         {

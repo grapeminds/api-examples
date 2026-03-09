@@ -4,9 +4,9 @@
 # Set your API key before running:
 #   export API_KEY=your_key_here
 #
-# Base URL: https://grapeminds.eu/api/public/v1
+# Base URL: https://api.grapeminds.eu/public/v1
 
-BASE_URL="https://grapeminds.eu/api/public/v1"
+BASE_URL="https://api.grapeminds.eu/public/v1"
 API_KEY="${API_KEY:-YOUR_API_KEY}"
 
 gm_get() {

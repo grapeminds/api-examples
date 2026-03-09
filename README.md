@@ -39,7 +39,7 @@ Typical use cases include:
 ## Base URL
 
 ```
-https://grapeminds.eu/api/public/v1
+https://api.grapeminds.eu/public/v1
 ```
 
 All endpoints are relative to this base URL.
@@ -80,7 +80,7 @@ Example request:
 
 ```bash
 curl -H "Authorization: Bearer $API_KEY" \
-     https://grapeminds.eu/api/public/v1/ping
+     https://api.grapeminds.eu/public/v1/ping
 ```
 
 Example response:
@@ -353,12 +353,12 @@ The quickest way to try a single endpoint in each language (set `API_KEY` first)
 **curl**
 ```bash
 curl -H "Authorization: Bearer $API_KEY" \
-     https://grapeminds.eu/api/public/v1/wines
+     https://api.grapeminds.eu/public/v1/wines
 ```
 
 **Node.js**
 ```javascript
-const res = await fetch("https://grapeminds.eu/api/public/v1/wines", {
+const res = await fetch("https://api.grapeminds.eu/public/v1/wines", {
   headers: { Authorization: `Bearer ${process.env.API_KEY}` },
 });
 console.log(await res.json());
@@ -368,7 +368,7 @@ console.log(await res.json());
 ```python
 import os, requests
 headers = {"Authorization": f"Bearer {os.environ['API_KEY']}"}
-print(requests.get("https://grapeminds.eu/api/public/v1/wines", headers=headers).json())
+print(requests.get("https://api.grapeminds.eu/public/v1/wines", headers=headers).json())
 ```
 
 **PHP**
@@ -376,12 +376,12 @@ print(requests.get("https://grapeminds.eu/api/public/v1/wines", headers=headers)
 $ctx = stream_context_create(['http' => [
     'header' => 'Authorization: Bearer ' . getenv('API_KEY'),
 ]]);
-echo file_get_contents("https://grapeminds.eu/api/public/v1/wines", false, $ctx);
+echo file_get_contents("https://api.grapeminds.eu/public/v1/wines", false, $ctx);
 ```
 
 **TypeScript**
 ```typescript
-const res = await fetch("https://grapeminds.eu/api/public/v1/wines", {
+const res = await fetch("https://api.grapeminds.eu/public/v1/wines", {
   headers: { Authorization: `Bearer ${process.env.API_KEY}` },
 });
 console.log(await res.json());
@@ -390,7 +390,7 @@ console.log(await res.json());
 **Ruby**
 ```ruby
 require "net/http"; require "json"
-req = Net::HTTP::Get.new(URI("https://grapeminds.eu/api/public/v1/wines"))
+req = Net::HTTP::Get.new(URI("https://api.grapeminds.eu/public/v1/wines"))
 req["Authorization"] = "Bearer #{ENV['API_KEY']}"
 res = Net::HTTP.start("grapeminds.eu", 443, use_ssl: true) { |h| h.request(req) }
 puts JSON.pretty_generate(JSON.parse(res.body))
@@ -398,7 +398,7 @@ puts JSON.pretty_generate(JSON.parse(res.body))
 
 **Swift**
 ```swift
-var req = URLRequest(url: URL(string: "https://grapeminds.eu/api/public/v1/wines")!)
+var req = URLRequest(url: URL(string: "https://api.grapeminds.eu/public/v1/wines")!)
 req.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
 let (data, _) = try await URLSession.shared.data(for: req)
 print(String(data: data, encoding: .utf8)!)
@@ -407,7 +407,7 @@ print(String(data: data, encoding: .utf8)!)
 **Dart / Flutter**
 ```dart
 final res = await http.get(
-  Uri.parse('https://grapeminds.eu/api/public/v1/wines'),
+  Uri.parse('https://api.grapeminds.eu/public/v1/wines'),
   headers: {'Authorization': 'Bearer $apiKey'},
 );
 print(res.body);

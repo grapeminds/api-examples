@@ -8,14 +8,14 @@
 // Run:
 //   API_KEY=your_key dart run examples/dart/examples.dart
 //
-// Base URL: https://grapeminds.eu/api/public/v1
+// Base URL: https://api.grapeminds.eu/public/v1
 
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
-const String baseUrl = 'https://grapeminds.eu/api/public/v1';
+const String baseUrl = 'https://api.grapeminds.eu/public/v1';
 
 String get apiKey => Platform.environment['API_KEY'] ?? 'YOUR_API_KEY';
 

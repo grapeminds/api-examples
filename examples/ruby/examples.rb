@@ -2,13 +2,13 @@
 # Requires: Ruby 2.7+, no external gems needed (uses net/http from stdlib)
 # Set your API key:  API_KEY=your_key ruby examples/ruby/examples.rb
 #
-# Base URL: https://grapeminds.eu/api/public/v1
+# Base URL: https://api.grapeminds.eu/public/v1
 
 require "net/http"
 require "json"
 require "uri"
 
-BASE_URL = "https://grapeminds.eu/api/public/v1"
+BASE_URL = "https://api.grapeminds.eu/public/v1"
 API_KEY  = ENV.fetch("API_KEY", "YOUR_API_KEY")
 
 def api_get(path)

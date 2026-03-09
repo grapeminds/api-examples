@@ -1,9 +1,9 @@
 // grapeminds Wine API – Node.js examples (Node 18+ built-in fetch)
 // Set your API key:  API_KEY=your_key node examples/node/examples.js
 //
-// Base URL: https://grapeminds.eu/api/public/v1
+// Base URL: https://api.grapeminds.eu/public/v1
 
-const BASE_URL = "https://grapeminds.eu/api/public/v1";
+const BASE_URL = "https://api.grapeminds.eu/public/v1";
 const API_KEY = process.env.API_KEY ?? "YOUR_API_KEY";
 
 async function get(path) {

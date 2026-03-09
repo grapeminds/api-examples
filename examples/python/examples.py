@@ -2,13 +2,13 @@
 # Requires: pip install requests
 # Set your API key:  API_KEY=your_key python examples/python/examples.py
 #
-# Base URL: https://grapeminds.eu/api/public/v1
+# Base URL: https://api.grapeminds.eu/public/v1
 
 import json
 import os
 import requests
 
-BASE_URL = "https://grapeminds.eu/api/public/v1"
+BASE_URL = "https://api.grapeminds.eu/public/v1"
 API_KEY = os.environ.get("API_KEY", "YOUR_API_KEY")
 
 session = requests.Session()
