@@ -15,6 +15,8 @@ The API can also be used as a **wine dataset API for AI and machine learning app
 ![API](https://img.shields.io/badge/API-Wine-green)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
+---
+
 ## Features
 
 The Grapeminds API provides access to:
@@ -56,7 +58,7 @@ Authorization: Bearer YOUR_API_KEY
 
 Alternatively: `X-API-Key: YOUR_API_KEY`
 
-Obtain your API key at [grapeminds.eu/entwickler#registration](https://grapeminds.eu/entwickler#registration).
+Obtain your API key at https://grapeminds.eu/developers#registration.
 
 Set the key as an environment variable before running the example scripts:
 
@@ -450,7 +452,7 @@ The platform helps developers, hospitality businesses, and wine enthusiasts mana
 
 Learn more:
 
-https://grapeminds.de
+https://grapeminds.eu
 
 ---
 
