@@ -4,20 +4,38 @@
 
 ## Documentation
 
-- [API Overview](https://grapeminds.eu/developers/wine-api)
-- [Endpoint Reference](https://grapeminds.eu/developers/endpoints)
-- [Authentication](https://grapeminds.eu/developers/authentication)
-- [Rate Limits](https://grapeminds.eu/developers/rate-limits)
-- [Use Cases](https://grapeminds.eu/developers/use-cases)
-- [AI & LLM Integration](https://grapeminds.eu/developers/ai-integration)
-- [Postman Collection (JSON)](https://grapeminds.eu/postman/GrapeMinds-Public-API-v1.postman_collection.json)
+- [API Overview](https://grapeminds.eu/wine-api)
+- [Endpoint Reference](https://grapeminds.eu/wine-api/endpoints)
+- [Authentication](https://grapeminds.eu/wine-api/authentication)
+- [Rate Limits](https://grapeminds.eu/wine-api/rate-limits)
+- [Use Cases](https://grapeminds.eu/wine-api/use-cases)
+- [AI & LLM Integration](https://grapeminds.eu/wine-api/ai-integration)
+
+Language-specific documentation entry points:
+
+- en: https://grapeminds.eu/developers/wine-api
+- de: https://grapeminds.de/entwickler/wein-api
+- es: https://grapeminds.es/es/developers/wine-api
+- da: https://grapeminds.dk/da/developers/wine-api
+- pt: https://grapeminds.pt/pt/desenvolvedores/api-vinho
+- sv: https://grapeminds.se/sv/utvecklare/vin-api
+- nl: https://grapeminds.be/nl/ontwikkelaars/wijn-api
+- fr: https://grapeminds.fr/developpeur/api-vin
+- it: https://grapeminds.it/sviluppatore/api-vino
+
+## Resources
+
+- [LLMs](https://grapeminds.eu/wine-api-llms.txt)
+- [OpenAPI](https://grapeminds.eu/api-specs/openapi.yaml)
+- [API Spec (AI)](https://grapeminds.eu/api-specs/ai-spec.txt)
+- [Postman](https://grapeminds.eu/postman/GrapeMinds-Public-API-v1.postman_collection.json)
 
 ## Base Configuration
 
 - **Base URL:** `https://api.grapeminds.eu/public/v1`
 - **Content-Type:** `application/json`
 - **Authentication:** `Authorization: Bearer YOUR_API_KEY` or `X-API-Key: YOUR_API_KEY`
-- **Supported Languages:** `de`, `en`, `fr`, `it` (via `Accept-Language` header or `?lang=` parameter)
+- **Supported Languages:** `de`, `en`, `it`, `fr`, `es`, `pt`, `sa`, `dk`, `nl` (via `Accept-Language` header or `?lang=` parameter)
 
 ## Rate Limits
 
@@ -383,7 +401,7 @@ Get detailed insights about a wine region including climate, terroir, signature 
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
-| `lang` | string | no | — | Language: `de`, `en`, `fr`, `it`. Falls back to `Accept-Language` header, then `en`. |
+| `lang` | string | no | — | Language: `de`, `en`, `it`, `fr`, `es`, `pt`, `sa`, `dk`, `nl`. Falls back to `Accept-Language` header, then `en`. |
 
 **Example:** `GET /region-insights/5?lang=en`
 
@@ -429,7 +447,7 @@ Get the optimal drinking window for a specific wine, including assessments for d
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
-| `lang` | string | no | — | Language: `de`, `en`, `fr`, `it`. Falls back to `Accept-Language` header, then `en`. |
+| `lang` | string | no | — | Language: `de`, `en`, `it`, `fr`, `es`, `pt`, `sa`, `dk`, `nl`. Falls back to `Accept-Language` header, then `en`. |
 
 **Example:** `GET /drinking-periods/42?lang=en`
 
@@ -540,6 +558,52 @@ POST /photo/analyze
 
 ---
 
+### POST /licence/{wine_id}
+
+Acquire a Persistent Storage License for a wine dataset.
+
+Once licensed, the dataset may be stored permanently and used commercially without time limitation.
+
+**Requirements:**
+
+- Active API subscription
+- Acceptance of the Commercial Dataset License Terms in the API dashboard
+
+**Path Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `wine_id` | integer | **yes** | Numeric ID of the wine dataset to license |
+
+**Example:**
+```bash
+curl -X POST \
+     -H "Authorization: Bearer YOUR_API_KEY" \
+     "https://api.grapeminds.eu/public/v1/licence/9146"
+```
+
+**Response (201 - New License):**
+```json
+{
+  "message": "Licensed.",
+  "wine_id": 9146,
+  "licensed_at": "2025-06-01T12:00:00.000000Z"
+}
+```
+
+**Response (200 - Already Licensed):**
+```json
+{
+  "message": "Already licensed.",
+  "wine_id": 9146,
+  "licensed_at": "2025-05-15T08:30:00.000000Z"
+}
+```
+
+**Note:** Each license is billed as a metered usage event on the active subscription. Licensed datasets can be reviewed in the API dashboard.
+
+---
+
 ### GET /ping
 
 Health check endpoint to verify authentication and API availability.
@@ -580,7 +644,7 @@ All list endpoints return paginated results with a consistent structure:
 Many endpoints support localization via:
 - `Accept-Language` header (e.g., `Accept-Language: de`)
 - `?lang=` query parameter (takes precedence where supported)
-- Supported languages: `de` (German), `en` (English), `fr` (French), `it` (Italian)
+- Supported languages: `de`, `en`, `it`, `fr`, `es`, `pt`, `sa`, `dk`, `nl`
 - Default: `en`
 
 ### Error Responses

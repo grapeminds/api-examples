@@ -58,7 +58,7 @@ Authorization: Bearer YOUR_API_KEY
 
 Alternatively: `X-API-Key: YOUR_API_KEY`
 
-Obtain your API key at https://grapeminds.eu/developers#registration.
+Obtain your API key at https://grapeminds.eu/wine-api#registration.
 
 Set the key as an environment variable before running the example scripts:
 
@@ -165,7 +165,7 @@ Full wine details: descriptions, grape varieties, food pairings, tasting notes, 
 GET /wines/42
 ```
 
-Use the `Accept-Language` header (`de`, `en`, `fr`, `it`) for localized content. If a translation is not yet available, AI enrichment is triggered automatically in the background.
+Use the `Accept-Language` header (`de`, `en`, `it`, `fr`, `es`, `pt`, `sa`, `dk`, `nl`) for localized content. If a translation is not yet available, AI enrichment is triggered automatically in the background.
 
 ---
 
@@ -264,6 +264,51 @@ Analyze a wine label photo using AI. Returns matched wine candidates from the da
 POST /photo/analyze
 { "photo": "<base64-encoded image>", "max_results": 5 }
 ```
+
+---
+
+### POST /licence/{wine_id}
+
+Acquire a Persistent Storage License for a wine dataset. Once licensed, the dataset may be stored permanently and used commercially without time limitation.
+
+Requires:
+
+- an active API subscription
+- acceptance of the Commercial Dataset License Terms in the API dashboard
+
+Path parameter:
+
+- `wine_id` (integer): numeric ID of the wine dataset to license
+
+Example request:
+
+```bash
+curl -X POST \
+     -H "Authorization: Bearer $API_KEY" \
+     "https://api.grapeminds.eu/public/v1/licence/9146"
+```
+
+Example response (201 - New License):
+
+```json
+{
+  "message": "Licensed.",
+  "wine_id": 9146,
+  "licensed_at": "2025-06-01T12:00:00.000000Z"
+}
+```
+
+Example response (200 - Already Licensed):
+
+```json
+{
+  "message": "Already licensed.",
+  "wine_id": 9146,
+  "licensed_at": "2025-05-15T08:30:00.000000Z"
+}
+```
+
+Each license is billed as a metered usage event on your active subscription. You can view all licensed datasets in your API dashboard.
 
 ---
 
@@ -421,12 +466,17 @@ print(res.body);
 
 The API supports multiple languages for wine metadata and descriptions.
 
-Supported languages include:
+Supported language codes:
 
-- English  
-- German  
-- French  
-- Italian  
+- `de`
+- `en`
+- `it`
+- `fr`
+- `es`
+- `pt`
+- `sa`
+- `dk`
+- `nl`
 
 Example header:
 
@@ -440,7 +490,26 @@ Accept-Language: en
 
 Full developer documentation:
 
-https://grapeminds.eu/developers/endpoints
+https://grapeminds.eu/wine-api/endpoints
+
+Language-specific documentation entry points:
+
+- en: https://grapeminds.eu/developers/wine-api
+- de: https://grapeminds.de/entwickler/wein-api
+- es: https://grapeminds.es/es/developers/wine-api
+- da: https://grapeminds.dk/da/developers/wine-api
+- pt: https://grapeminds.pt/pt/desenvolvedores/api-vinho
+- sv: https://grapeminds.se/sv/utvecklare/vin-api
+- nl: https://grapeminds.be/nl/ontwikkelaars/wijn-api
+- fr: https://grapeminds.fr/developpeur/api-vin
+- it: https://grapeminds.it/sviluppatore/api-vino
+
+Additional resources:
+
+- LLMs: https://grapeminds.eu/wine-api-llms.txt
+- OpenAPI: https://grapeminds.eu/api-specs/openapi.yaml
+- API Spec (AI): https://grapeminds.eu/api-specs/ai-spec.txt
+- Postman: https://grapeminds.eu/postman/GrapeMinds-Public-API-v1.postman_collection.json
 
 ---
 
